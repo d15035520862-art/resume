@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect x="2" y="2" width="60" height="60" rx="11" fill="#b03a2e"/>
+  <rect x="7" y="7" width="50" height="50" rx="7" fill="none" stroke="#fff8ef" stroke-opacity="0.28" stroke-width="2"/>
+  <text x="32" y="26" font-family="Noto Serif SC, Songti SC, serif" font-size="19" font-weight="700" fill="#fff8ef" text-anchor="middle">丁</text>
+  <text x="32" y="46" font-family="Noto Serif SC, Songti SC, serif" font-size="15" font-weight="700" fill="#fff8ef" text-anchor="middle">艳楠</text>
+</svg>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>启明星 AI · 低保真原型（Wireframe）</title>
+<style>
+  :root{
+    --bg:#f2f4f8; --wire:#d5dbe6; --wire-dark:#9aa5b8; --ink:#3a4256;
+    --acc:#4d7cff; --acc2:#ffb84d; --panel:#fff; --line:#e2e7f0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .top{background:#10172e;color:#c9d4ef;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .top h1{margin:0;font-size:19px;color:#fff}
+  .top h1 em{font-style:normal;color:var(--acc2)}
+  .top .note{font-size:12px;color:#8fa2c6}
+  .layout{max-width:1120px;margin:0 auto;padding:18px 20px 80px}
+  .legend{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#5b6a8a}
+  .legend b{color:var(--ink)}
+  .screen{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 24px rgba(20,32,80,.08);overflow:hidden;margin-bottom:22px}
+  .screen-head{background:#f7f9fd;border-bottom:1px solid var(--line);padding:10px 18px;font-size:13px;font-weight:700;color:#5b6a8a;display:flex;justify-content:space-between;align-items:center}
+  .screen-head .tag{background:#e8efff;color:var(--acc);border-radius:999px;padding:2px 10px;font-size:11px;font-weight:700}
+  .screen-body{padding:20px}
+  .wire{background:var(--wire);border:1.5px dashed var(--wire-dark);border-radius:8px;color:#6a7690;font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;min-height:34px;padding:6px 10px}
+  .wire.fill{background:#eef1f7;border-style:solid}
+  .wire.btn{background:var(--acc2);border:none;color:#5a3c00;font-weight:700;cursor:pointer;border-radius:10px}
+  .wire.btn.sec{background:#fff;border:1.5px solid var(--wire-dark);color:#3a4256}
+  .wire.btn:active{transform:translateY(1px)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .col{display:flex;flex-direction:column;gap:10px}
+  .grow{flex:1;min-width:140px}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+  .grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px}
+  .label{font-size:12px;color:#5b6a8a;font-weight:700;margin-top:16px}
+  .label:first-child{margin-top:0}
+  .annot{position:relative}
+  .annot::after{content:attr(data-n);position:absolute;top:-8px;right:-8px;background:var(--acc);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .callout{margin-top:12px;font-size:12px;color:#5b6a8a}
+  .callout b{color:var(--acc)}
+  .screens-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .screens-nav button{font-family:inherit;font-size:13px;font-weight:600;padding:8px 14px;border:1.5px solid var(--line);background:#fff;border-radius:999px;color:#5b6a8a;cursor:pointer}
+  .screens-nav button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+  .hidden{display:none}
+  h2.sec-title{font-size:15px;margin:0 0 4px}
+</style>
+</head>
+<body>
+  <div class="top">
+    <h1>启明星 <em>AI</em> · 低保真原型图（Wireframe）</h1>
+    <span class="note">对应 PRD v1.0 · 六大界面 · 灰框 = 元素占位 · 点击导航切换</span>
+  </div>
+
+  <div class="layout">
+    <div class="legend">
+      <b>图例：</b> 虚线灰框 = 输入/占位 · 金色实心 = 主按钮 · 白色描边 = 次按钮 · 蓝色数字 = 交互说明（见每屏下方注释）
+    </div>
+
+    <div class="screens-nav" id="nav">
+      <button data-s="s0" class="on">① 首页 / 顶栏+导航</button>
+      <button data-s="s1">② 绘本创作工坊</button>
+      <button data-s="s2">③ 语音伴读</button>
+      <button data-s="s3">④ 认知测评</button>
+      <button data-s="s4">⑤ 教学助手</button>
+      <button data-s="s5">⑥ 数据后台 /admin</button>
+    </div>
+
+    <!-- ============ ① 首页 ============ -->
+    <div class="screen" id="s0">
+      <div class="screen-head"><span>界面 ① · 首页（顶栏 + 全局导航 + 反馈浮层）</span><span class="tag">全局框架</span></div>
+      <div class="screen-body">
+        <div class="row" style="margin-top:0">
+          <div class="wire grow annot" data-n="1" style="min-height:64px;justify-content:flex-start">✦ 启明星 AI · 标语</div>
+          <div class="wire" style="min-width:200px">公益数据：1000+ / 40+ / 7省</div>
+          <div class="wire" style="min-width:180px;background:#e6f7ef;border-color:#1f9d6b;color:#0c6b46">✓ AI 已连接（deepseek-chat）</div>
+        </div>
+        <div class="row">
+          <div class="wire btn" style="min-width:120px">🎨 绘本创作工坊</div>
+          <div class="wire btn sec" style="min-width:110px">🔊 语音伴读</div>
+          <div class="wire btn sec" style="min-width:110px">🧠 认知测评</div>
+          <div class="wire btn sec" style="min-width:110px">👩‍🏫 教学助手</div>
+        </div>
+        <div class="label">内容区（随 Tab 切换）</div>
+        <div class="wire" style="min-height:220px">当前模块内容面板（见 ②–⑤）</div>
+        <div class="label">反馈浮层（全局右下角，固定悬浮）</div>
+        <div class="row">
+          <div class="wire btn" style="min-width:120px">💬 反馈</div>
+          <div class="wire grow">点击展开：👍好用 / 😐一般 / 👎难用 · 留言框 · 联系方式 · 提交</div>
+        </div>
+        <div class="callout"><b>①</b> 品牌区｜<b>②</b> 状态徽标实时反映模型配置｜<b>③</b> 四 Tab 导航（全键盘 + aria）｜<b>④</b> 反馈浮层全局可用</div>
+      </div>
+    </div>
+
+    <!-- ============ ② 创作工坊 ============ -->
+    <div class="screen hidden" id="s1">
+      <div class="screen-head"><span>界面 ② · 绘本创作工坊</span><span class="tag">核心生成</span></div>
+      <div class="screen-body">
+        <div class="wire" style="min-height:44px;background:#eef1f7;border-style:solid;justify-content:flex-start;font-weight:700">标题：用 AI 把 20 年 40 本绘本，变成"分钟级"无限绘本</div>
+        <div class="label">输入区</div>
+        <div class="row" style="margin-top:6px">
+          <div class="wire grow annot" data-n="1">主题下拉：火山/长江/星空/海洋/恐龙化石/森林/沙漠/冰川</div>
+          <div class="wire btn annot" data-n="2" style="min-width:160px">✨ 生成绘本脚本</div>
+        </div>
+        <div class="label">输出区（绘本脚本卡片）</div>
+        <div class="wire annot" data-n="3" style="min-height:60px">📖 标题 + 主题 + 建议时长 + [AI 生成/示例内容] 徽标</div>
+        <div class="wire annot" data-n="4" style="min-height:80px">故事正文（300-600 字）</div>
+        <div class="grid2">
+          <div class="wire annot" data-n="5" style="min-height:60px">🖐 触觉设计</div>
+          <div class="wire annot" data-n="5" style="min-height:60px">👃 嗅觉设计</div>
+          <div class="wire annot" data-n="5" style="min-height:60px">👂 听觉设计</div>
+          <div class="wire annot" data-n="5" style="min-height:60px">🗣 志愿者讲解词</div>
+        </div>
+        <div class="row">
+          <div class="wire grow annot" data-n="6" style="min-height:46px">⠿ 盲文引导 ×3 条</div>
+        </div>
+        <div class="grid4">
+          <div class="wire annot" data-n="7" style="min-height:56px">👁 感知目标</div>
+          <div class="wire annot" data-n="7" style="min-height:56px">🧩 记忆目标</div>
+          <div class="wire annot" data-n="7" style="min-height:56px">💡 常识目标</div>
+          <div class="wire annot" data-n="7" style="min-height:56px">📚 学习目标</div>
+        </div>
+        <div class="row">
+          <div class="wire btn annot" data-n="8" style="min-width:160px">🔊 朗读这个故事 → 跳转③</div>
+        </div>
+        <div class="callout"><b>①</b> 主题输入｜<b>②</b> 提交后 loading（⏳创作中…，防重复提交）｜<b>③</b> 标题元信息｜<b>④</b> 故事｜<b>⑤</b> 多感官设计四联｜<b>⑥</b> 盲文提示｜<b>⑦</b> 四维认知目标｜<b>⑧</b> 一键朗读联动伴读模块</div>
+      </div>
+    </div>
+
+    <!-- ============ ③ 语音伴读 ============ -->
+    <div class="screen hidden" id="s2">
+      <div class="screen-head"><span>界面 ③ · 语音伴读</span><span class="tag">TTS 朗读</span></div>
+      <div class="screen-body">
+        <div class="row" style="margin-top:0">
+          <div class="wire grow annot" data-n="1">绘本库下拉（火山/长江/星空…）</div>
+          <div class="wire btn sec annot" data-n="2" style="min-width:90px">载入</div>
+        </div>
+        <div class="wire annot" data-n="3" style="min-height:140px;margin-top:10px;align-items:flex-start">故事文本区（可载入 / 可粘贴任意文本）</div>
+        <div class="row">
+          <div class="wire btn annot" data-n="4" style="min-width:110px;background:#4d7cff;color:#fff;border:none">🔊 朗读</div>
+          <div class="wire btn sec annot" data-n="4" style="min-width:90px">⏸ 暂停</div>
+          <div class="wire btn sec annot" data-n="4" style="min-width:90px">⏹ 停止</div>
+          <div class="wire grow annot" data-n="5">语速滑杆 0.5–1.5 ｜ 音量滑杆 0–1</div>
+        </div>
+        <div class="callout"><b>①</b> 选择内置绘本｜<b>②</b> 载入文本｜<b>③</b> 文本编辑区｜<b>④</b> 播放控制（暂停/继续/停止）｜<b>⑤</b> 语速音量调节（Web Speech API，零成本）</div>
+      </div>
+    </div>
+
+    <!-- ============ ④ 认知测评 ============ -->
+    <div class="screen hidden" id="s3">
+      <div class="screen-head"><span>界面 ④ · 认知测评</span><span class="tag">四维评估</span></div>
+      <div class="screen-body">
+        <div class="label">输入区：四维滑杆打分</div>
+        <div class="grid4">
+          <div class="wire annot" data-n="1" style="min-height:90px">👁 感知能力<br>滑杆 + 分值</div>
+          <div class="wire annot" data-n="1" style="min-height:90px">🧩 记忆能力<br>滑杆 + 分值</div>
+          <div class="wire annot" data-n="1" style="min-height:90px">💡 常识能力<br>滑杆 + 分值</div>
+          <div class="wire annot" data-n="1" style="min-height:90px">📚 学习能力<br>滑杆 + 分值</div>
+        </div>
+        <div class="row">
+          <div class="wire btn annot" data-n="2" style="min-width:180px;margin:10px auto 0">📊 生成测评报告</div>
+        </div>
+        <div class="label">输出区：测评报告</div>
+        <div class="wire annot" data-n="3" style="min-height:40px">评级徽章（优秀/良好/一般/待提升）+ 来源标注</div>
+        <div class="wire annot" data-n="4" style="min-height:46px">总体评价</div>
+        <div class="grid4">
+          <div class="wire annot" data-n="5" style="min-height:80px">维度条 + 点评 + 建议 ×4</div>
+          <div class="wire annot" data-n="5" style="min-height:80px">维度条 + 点评 + 建议 ×4</div>
+          <div class="wire annot" data-n="5" style="min-height:80px">维度条 + 点评 + 建议 ×4</div>
+          <div class="wire annot" data-n="5" style="min-height:80px">维度条 + 点评 + 建议 ×4</div>
+        </div>
+        <div class="row">
+          <div class="wire grow annot" data-n="6" style="min-height:44px">总体建议（≥3 条）</div>
+          <div class="wire grow annot" data-n="6" style="min-height:44px">推荐多感官训练活动（≥2 条）</div>
+        </div>
+        <div class="callout"><b>①</b> 四维打分（实时显示分值）｜<b>②</b> 提交分析｜<b>③</b> 评级 + 来源｜<b>④</b> 总体评价｜<b>⑤</b> 逐维点评｜<b>⑥</b> 建议与训练活动</div>
+      </div>
+    </div>
+
+    <!-- ============ ⑤ 教学助手 ============ -->
+    <div class="screen hidden" id="s4">
+      <div class="screen-head"><span>界面 ⑤ · 教学助手</span><span class="tag">教案生成</span></div>
+      <div class="screen-body">
+        <div class="row" style="margin-top:0">
+          <div class="wire grow annot" data-n="1">课程主题下拉（火山/长江/星空/海洋）</div>
+          <div class="wire grow annot" data-n="1">适用对象下拉（盲校 1-3 / 4-6 年级 / 学龄前）</div>
+          <div class="wire btn annot" data-n="2" style="min-width:140px">📋 生成教案</div>
+        </div>
+        <div class="label">输出区：教案</div>
+        <div class="wire annot" data-n="3" style="min-height:40px">课程主题 + 适用对象 + 总时长</div>
+        <div class="grid2">
+          <div class="wire annot" data-n="4" style="min-height:56px">教学目标（≥3）</div>
+          <div class="wire annot" data-n="4" style="min-height:56px">教具准备清单</div>
+        </div>
+        <div class="wire annot" data-n="5" style="min-height:110px">教学环节卡片 ×5（环节名 · 分钟 · 活动 · 主讲/辅助分工）</div>
+        <div class="row">
+          <div class="wire grow annot" data-n="6" style="min-height:44px">研学延伸活动</div>
+        </div>
+        <div class="grid4">
+          <div class="wire annot" data-n="7" style="min-height:50px">👁 感知</div>
+          <div class="wire annot" data-n="7" style="min-height:50px">🧩 记忆</div>
+          <div class="wire annot" data-n="7" style="min-height:50px">💡 常识</div>
+          <div class="wire annot" data-n="7" style="min-height:50px">📚 学习</div>
+        </div>
+        <div class="callout"><b>①</b> 输入主题 + 对象｜<b>②</b> 生成｜<b>③</b> 元信息｜<b>④</b> 目标/教具｜<b>⑤</b> 五环节（含时长 + 志愿者分工）｜<b>⑥</b> 研学延伸｜<b>⑦</b> 四维认知目标</div>
+      </div>
+    </div>
+
+    <!-- ============ ⑥ 数据后台 ============ -->
+    <div class="screen hidden" id="s5">
+      <div class="screen-head"><span>界面 ⑥ · 数据后台 /admin（独立页）</span><span class="tag">运营后台</span></div>
+      <div class="screen-body">
+        <div class="row" style="margin-top:0">
+          <div class="wire grow annot" data-n="1">口令输入框（ADMIN_TOKEN）</div>
+          <div class="wire btn annot" data-n="2" style="min-width:100px">加载数据</div>
+          <div class="wire btn sec annot" data-n="3" style="min-width:130px">导出反馈 CSV</div>
+          <div class="wire btn sec annot" data-n="3" style="min-width:130px">导出事件 CSV</div>
+        </div>
+        <div class="label">统计卡片</div>
+        <div class="grid4">
+          <div class="wire annot" data-n="4" style="min-height:64px">反馈总数</div>
+          <div class="wire annot" data-n="4" style="min-height:64px">事件总数</div>
+          <div class="wire annot" data-n="4" style="min-height:64px">今日反馈</div>
+          <div class="wire annot" data-n="4" style="min-height:64px">今日事件</div>
+        </div>
+        <div class="label">明细列表</div>
+        <div class="wire annot" data-n="5" style="min-height:90px">最近反馈表（时间/评分/内容/页面/联系）</div>
+        <div class="wire annot" data-n="5" style="min-height:90px;margin-top:10px">最近使用事件表（时间/类型/主题/来源）</div>
+        <div class="callout"><b>①</b> 口令鉴权｜<b>②</b> 加载统计｜<b>③</b> CSV 导出（带 BOM，Excel 中文不乱码）｜<b>④</b> 核心统计｜<b>⑤</b> 反馈/事件明细</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const nav = document.getElementById('nav');
+    const screens = ['s0','s1','s2','s3','s4','s5'];
+    nav.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      nav.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      screens.forEach(id => document.getElementById(id).classList.toggle('hidden', id !== b.dataset.s));
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>

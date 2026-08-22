@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>丁艳楠 · 产品实习生 简历</title>
+<meta name="description" content="丁艳楠 · 产品实习生简历。可保存为 PDF。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #ffffff;
+    --ink: #26201a;
+    --soft: #55504a;
+    --faint: #8a8378;
+    --line: #d8cdbb;
+    --accent: #a63a2e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #efe7d8; }
+  body {
+    font-family: "Noto Serif SC", "Songti SC", serif;
+    color: var(--ink);
+    font-size: 13.5px;
+    line-height: 1.62;
+    background: var(--paper);
+  }
+
+  /* 屏幕上的工具栏（打印时隐藏） */
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    background: #2a2117; color: #f3ead9;
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+  .toolbar .hint { font-size: 13px; opacity: 0.75; }
+  .toolbar .actions { display: flex; gap: 10px; }
+  .toolbar button, .toolbar a {
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    padding: 9px 18px; border-radius: 9px; cursor: pointer; text-decoration: none;
+    border: none;
+  }
+  .btn-print { background: #b03a2e; color: #fff8ef; }
+  .btn-print:hover { background: #8f2c22; }
+  .btn-back { background: transparent; color: #f3ead9; border: 1px solid rgba(243,234,217,0.4) !important; }
+  .btn-back:hover { background: rgba(243,234,217,0.1); }
+
+  .sheet {
+    max-width: 800px; margin: 24px auto 60px;
+    background: var(--paper);
+    padding: 56px 60px;
+    box-shadow: 0 12px 40px rgba(74,55,32,0.14);
+  }
+
+  /* 页头 */
+  header.resume { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 2.5px solid var(--accent); padding-bottom: 16px; margin-bottom: 18px; }
+  .name { font-family: "Playfair Display", "Noto Serif SC", serif; font-size: 30px; font-weight: 800; letter-spacing: 0.02em; }
+  .name small { display: block; font-size: 13px; font-weight: 600; color: var(--soft); letter-spacing: 0; margin-top: 2px; }
+  .contact { text-align: right; font-size: 12px; color: var(--soft); line-height: 1.7; }
+  .contact a { color: inherit; text-decoration: none; }
+
+  .intent { font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 18px; }
+
+  /* 区块 */
+  section.r { margin-bottom: 18px; }
+  h2 {
+    font-size: 15px; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--accent);
+    border-left: 4px solid var(--accent);
+    padding-left: 10px; margin-bottom: 10px;
+  }
+  .item { margin-bottom: 12px; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .item-title { font-weight: 700; font-size: 14px; }
+  .item-sub { color: var(--soft); font-size: 12.5px; }
+  .item-time { color: var(--faint); font-size: 12px; white-space: nowrap; font-weight: 500; }
+  .item-desc { color: var(--soft); font-size: 12.5px; margin: 3px 0 6px; }
+  ul.pts { list-style: none; }
+  ul.pts li { position: relative; padding-left: 16px; margin-bottom: 4px; }
+  ul.pts li::before { content: ""; position: absolute; left: 2px; top: 0.58em; width: 6px; height: 6px; background: var(--accent); transform: rotate(45deg); border-radius: 1px; }
+  ul.pts b { font-weight: 700; }
+  .courses { font-size: 12.5px; color: var(--soft); }
+  .courses b { color: var(--ink); }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .kv { font-size: 12.5px; margin-bottom: 6px; }
+  .kv b { font-weight: 700; }
+
+  @media (max-width: 640px) {
+    .sheet { padding: 32px 22px; }
+    header.resume { flex-direction: column; }
+    .contact { text-align: left; }
+    .cols { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    html, body { background: #fff; }
+    .toolbar { display: none; }
+    .sheet { margin: 0; max-width: none; padding: 0; box-shadow: none; }
+    @page { size: A4; margin: 16mm 15mm; }
+    body { font-size: 11.5px; }
+    section.r { margin-bottom: 12px; }
+    .item { margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <span class="hint">在打印对话框中选择「另存为 PDF」即可下载简历</span>
+    <div class="actions">
+      <a class="btn-back" href="index.html">← 返回网站</a>
+      <button class="btn-print" onclick="window.print()">🖨 打印 / 保存为 PDF</button>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <header class="resume">
+      <div class="name">丁艳楠<small>产品实习生 · 求职简历</small></div>
+      <div class="contact">
+        硕士 ｜ <a href="tel:15035520862">150 3552 0862</a><br />
+        <a href="mailto:17720251151042@stu.xmu.edu.cn">17720251151042@stu.xmu.edu.cn</a>
+      </div>
+    </header>
+
+    <p class="intent">求职意向：产品实习生 ｜ 立即到岗 ｜ 每周 5 天 ｜ 可实习 6 个月</p>
+
+    <section class="r">
+      <h2>教育背景</h2>
+      <div class="item">
+        <div class="item-head"><span class="item-title">厦门大学（985）<span class="item-sub">物流工程与管理 · 硕士</span></span><span class="item-time">2025.09 – 至今</span></div>
+      </div>
+      <div class="item">
+        <div class="item-head"><span class="item-title">中国地质大学（武汉）（211）<span class="item-sub">工程管理 · 本科</span></span><span class="item-time">2020.09 – 2024.06</span></div>
+      </div>
+      <p class="courses"><b>主修课程：</b>生成式 AI 与管理应用、大数据分析、项目管理、工程信息系统、高等运筹学、工程系统建模与仿真、高等物流学</p>
+    </section>
+
+    <section class="r">
+      <h2>产品经历</h2>
+
+      <div class="item">
+        <div class="item-head"><span class="item-title">启明星 AI 无障碍绘本创作与伴读平台（0→1 已上线）<span class="item-sub">· 产品负责人</span></span><span class="item-time">2022.05 – 至今</span></div>
+        <p class="item-desc">启明星以「听·触·嗅 + 盲文」多感官绘本帮扶视障儿童，沉淀 1000+ 儿童、700+ 份认知测评、40+ 套绘本规范；主导 AI 产品化升级，MVP 已上线（Web）。</p>
+        <ul class="pts">
+          <li><b>需求洞察</b>：清洗标注 700+ 份测评数据（感知/记忆/常识/学习四维），抽象 40+ 套「触摸点—内容—气味」规则图谱，发现「常识」维度偏弱，确立「先规则引擎、后 LLM」两阶段路线。</li>
+          <li><b>0→1 设计</b>：独立撰写 PRD，把 20 年教研方法转化为提示词工程，定义「自然主题 → 故事 + 触/嗅/听觉 + 盲文引导 + 四维认知目标」生成式方案；单本绘本设计周期由 14 天压缩至 4-5 天。</li>
+          <li><b>技术落地</b>：主导零依赖 Node.js 后端与多厂商 LLM 适配（DeepSeek / Gemini / OpenAI 兼容协议），设计「无 Key 演示 + 失败自动降级」容错；实现 Web 端 AI 语音伴读。</li>
+          <li><b>数据闭环</b>：设计反馈收集 + 埋点体系，搭建 /admin 数据后台（看板 + CSV 导出），接入 Supabase，形成「埋点—分析—迭代」闭环；按 WCAG 2.1 落地无障碍。</li>
+          <li><b>结果</b>：已上线（qmx-ai-production.up.railway.app），获「互联网+」全国铜奖。</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head"><span class="item-title">瑞声光电科技（常州）有限公司 <span class="item-sub">· PM 实习生</span></span><span class="item-time">2026.03 – 2026.08</span></div>
+        <ul class="pts">
+          <li><b>数据驱动优化</b>：分析 4 个具身智能硬件零件项目供应链全链路数据（200+ 种物料），推动物料交付准时率从 82% 提升至 95%+。</li>
+          <li><b>跨部门协同</b>：拉通产品、研发、工艺、采购、生产、质量、仓储等 10+ 团队，推动「方案评审 → 物料准备 → 产线排程 → 试制验证」落地，4 个项目均按期投产。</li>
+          <li><b>风险闭环</b>：累计识别并闭环供应商交期跳票、工艺瓶颈、来料质量异常等风险 30+ 项。</li>
+          <li><b>数据决策</b>：基于良率、损耗、节拍优化排产，4 个项目均一次性通过 Google、Meta、小米等客户现场审核进入量产。</li>
+        </ul>
+      </div>
+
+      <div class="item">
+        <div class="item-head"><span class="item-title">非遗 AI 短视频创作 · 中国剪纸 <span class="item-sub">· 个人项目</span></span><span class="item-time">2026.08</span></div>
+        <ul class="pts">
+          <li><b>AI 视频全流程</b>：以国家级非遗「中国剪纸」为主题，独立完成「文案 → 分镜 → 文生图 → 图生视频 → 剪辑合成」全流程，产出 20 秒成片。</li>
+          <li><b>生成优化</b>：使用即梦、可灵、剪映；针对非遗纹样细节易崩，用「真实参考图 + 风格锁定提示词」提升生成合格率 20%。</li>
+          <li><b>内容沉淀</b>：梳理可复用提示词模板与「失败→调优」复盘，形成非遗内容批量生产方法论。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="r">
+      <h2>其他经历</h2>
+      <div class="item">
+        <div class="item-head"><span class="item-title">新东方教育科技有限公司 <span class="item-sub">· 高中英语教师</span></span><span class="item-time">2025.04 – 2025.08</span></div>
+        <ul class="pts">
+          <li>服务 177 名学生，通过问卷、错题、课堂互动数据提炼 3 类核心痛点，设计分层学习路径；独立完成双语教学 200+ 小时，续报率位列新教师前 15%。</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head"><span class="item-title">传统文化类节目营销传播策略调查项目 <span class="item-sub">· 负责人</span></span><span class="item-time">2021.10 – 2022.04</span></div>
+        <ul class="pts">
+          <li>主导 1301 份问卷与 1913 条社媒评论采集清洗、信效度检验；用 K-means 与情感词典定位「19-23 岁学生」「40-44 岁管理者」两类核心受众，输出画像与内容偏好图谱，获全国三等奖。</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head"><span class="item-title">经管学院学生会创新创业实践部 <span class="item-sub">· 负责人</span></span><span class="item-time">2021.07 – 2022.07</span></div>
+        <ul class="pts">
+          <li>复盘 10+ 场活动数据提出「线上+线下混合 + 话题预热」策略，参与率从 30% 提升至 40%；推动新增「保研人物专访」专栏（均浏览量 900+），获评「校级优秀学生干部」。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="r">
+      <h2>其他信息</h2>
+      <div class="cols">
+        <div>
+          <p class="kv"><b>产品能力：</b>PRD 撰写、用户访谈、需求拆解与优先级、原型设计、数据埋点与看板、跨部门协同</p>
+          <p class="kv"><b>AI 能力：</b>提示词工程、LLM 应用 / Agent 设计、生成式 AI 产品设计</p>
+        </div>
+        <div>
+          <p class="kv"><b>工具：</b>墨刀 / Figma、ProcessOn / X-mind、Excel、Python / SQL、Anylogic、即梦 / 可灵 / 剪映、Cursor / Pi</p>
+          <p class="kv"><b>语言与证书：</b>英语 CET-6、IPMP-D 级、高中英语教师资格证、计算机三级、初级有声演播师</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
