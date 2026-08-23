@@ -596,6 +596,24 @@ a.work-card:hover { transform: translateY(-4px); border-color: var(--accent); bo
 }
 .wechat-shots figcaption b { color: var(--ink-soft); font-weight: 700; }
 
+.wechat-gif { margin: 0 0 24px; text-align: center; }
+.wechat-gif img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  background: #000;
+}
+.wechat-gif figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink-faint);
+  line-height: 1.6;
+}
+.wechat-gif figcaption b { color: var(--ink-soft); font-weight: 700; }
+
 /* ============ 教育 ============ */
 .edu-list { display: flex; flex-direction: column; gap: 0; }
 .edu {
