@@ -67,13 +67,17 @@
   var lightboxImg = document.getElementById("lightboxImg");
   var lightboxClose = document.getElementById("lightboxClose");
 
-  document.getElementById("storyboard").addEventListener("click", function (e) {
-    var img = e.target.closest("img");
-    if (!img) return;
-    lightboxImg.src = img.src;
-    lightboxImg.alt = img.alt;
-    lightbox.hidden = false;
-    document.body.style.overflow = "hidden";
+  ["storyboard", "wechatShots"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("click", function (e) {
+      var img = e.target.closest("img");
+      if (!img) return;
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+    });
   });
 
   function closeLightbox() {

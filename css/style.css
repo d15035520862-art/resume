@@ -556,6 +556,46 @@ a.work-card:hover { transform: translateY(-4px); border-color: var(--accent); bo
 .work-card p { font-size: 14.5px; color: var(--ink-soft); flex: 1; }
 .work-link { font-size: 13.5px; color: var(--accent); font-weight: 600; }
 
+/* ============ 微信重设计案例 ============ */
+.work-feature + .work-feature { margin-top: clamp(28px, 4vw, 48px); }
+
+.principle-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 24px; }
+.principle-row span {
+  font-size: 14.5px; color: var(--ink-soft);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 16px; background: var(--paper-2);
+}
+.principle-row span b { color: var(--accent); font-weight: 700; }
+
+.wechat-shots {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 18px;
+  margin: 0 0 24px;
+}
+.wechat-shots figure { margin: 0; }
+.wechat-shots img {
+  width: 100%;
+  height: auto;
+  border-radius: 26px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  cursor: zoom-in;
+  background: #000;
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.wechat-shots img:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.wechat-shots figcaption {
+  margin-top: 9px;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  text-align: center;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+.wechat-shots figcaption b { color: var(--ink-soft); font-weight: 700; }
+
 /* ============ 教育 ============ */
 .edu-list { display: flex; flex-direction: column; gap: 0; }
 .edu {
