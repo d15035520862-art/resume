@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>网站内容后台 · 丁艳楠简历站</title>
+<style>
+  :root { --bg:#f5f1e8; --card:#fff; --ink:#2a2117; --accent:#b03a2e; --muted:#8a7f6f; --line:#e4dcc9; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; font-size:14px; }
+  header { position:sticky; top:0; z-index:10; background:var(--card); border-bottom:1px solid var(--line); padding:10px 20px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; flex:1; }
+  .btn { border:1px solid var(--line); background:var(--card); color:var(--ink); padding:7px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
+  .btn:hover { border-color:var(--accent); color:var(--accent); }
+  .btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .btn.primary:hover { opacity:.9; color:#fff; }
+  .wrap { max-width:960px; margin:20px auto; padding:0 16px; }
+  .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+  .tab { padding:8px 14px; border-radius:20px; border:1px solid var(--line); cursor:pointer; background:var(--card); }
+  .tab.active { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px; margin-bottom:16px; display:none; }
+  .panel.active { display:block; }
+  .field { margin-bottom:14px; }
+  .field label { display:block; font-weight:600; margin-bottom:5px; }
+  .field .hint { color:var(--muted); font-size:12px; font-weight:400; margin-left:6px; }
+  input[type=text], input[type=url], textarea { width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:6px; font:inherit; background:#fff; }
+  textarea { min-height:70px; resize:vertical; line-height:1.6; }
+  .row { display:flex; gap:12px; }
+  .row > .field { flex:1; }
+  .sub { border:1px dashed var(--line); border-radius:8px; padding:12px; margin:12px 0; background:#fbf8f1; }
+  .sub-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .sub-head strong { flex:1; }
+  .sub-head button { border:0; background:transparent; color:var(--accent); cursor:pointer; font-size:13px; }
+  .add-btn { width:100%; padding:10px; border:1px dashed var(--accent); background:transparent; color:var(--accent); border-radius:8px; cursor:pointer; font-size:13px; }
+  .status { padding:8px 12px; border-radius:6px; margin-top:10px; display:none; }
+  .status.ok { display:block; background:#e7f4e4; color:#2c7a2c; }
+  .status.err { display:block; background:#fdeaea; color:#a33; }
+  details { border:1px solid var(--line); border-radius:8px; padding:12px; margin-bottom:16px; background:var(--card); }
+  summary { cursor:pointer; font-weight:600; }
+  details .field { margin-top:10px; }
+  .foot { text-align:center; color:var(--muted); font-size:12px; padding:20px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📝 简历网站内容后台</h1>
+  <button class="btn" onclick="preview()">预览网站</button>
+  <button class="btn" onclick="exportJson()">导出 JSON</button>
+  <button class="btn" onclick="copyJson()">复制 JSON</button>
+  <button class="btn primary" onclick="publish()">发布到 GitHub</button>
+</header>
+
+<div class="wrap">
+  <details>
+    <summary>⚙️ GitHub 发布设置（首次使用需配置）</summary>
+    <div class="field">
+      <label>GitHub Token <span class="hint">只存本浏览器 localStorage，不会提交到仓库</span></label>
+      <input type="password" id="ghToken" placeholder="ghp_xxx 或 github_pat_xxx（需 Contents 读写权限）" />
+    </div>
+    <div class="row">
+      <div class="field"><label>仓库 owner/name</label><input type="text" id="ghRepo" value="d15035520862-art/resume" /></div>
+      <div class="field"><label>文件路径</label><input type="text" id="ghPath" value="data/content.json" /></div>
+      <div class="field"><label>分支</label><input type="text" id="ghBranch" value="main" /></div>
+    </div>
+    <p class="hint" style="color:#8a7f6f">Token 创建：GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → 只勾选 resume 仓库 + Contents（Read and write）。</p>
+  </details>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-panel="p-basic">基本信息</div>
+    <div class="tab" data-panel="p-edu">教育</div>
+    <div class="tab" data-panel="p-skills">技能</div>
+    <div class="tab" data-panel="p-projects">项目经历</div>
+    <div class="tab" data-panel="p-works">作品卡片</div>
+  </div>
+
+  <section class="panel active" id="p-basic"></section>
+  <section class="panel" id="p-edu"></section>
+  <section class="panel" id="p-skills"></section>
+  <section class="panel" id="p-projects"></section>
+  <section class="panel" id="p-works"></section>
+
+  <div class="status" id="status"></div>
+  <p class="foot">修改后点「发布到 GitHub」，约 1-2 分钟在 d15035520862-art.github.io/resume 生效。</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var state = null;
+  var DATA_URL = "data/content.json";
+
+  /* ---------- 状态读写 ---------- */
+  function getPath(obj, path) {
+    return path.split(".").reduce(function (o, k) { return o == null ? undefined : o[k]; }, obj);
+  }
+  function setPath(obj, path, val) {
+    var ks = path.split(".");
+    var o = obj;
+    for (var i = 0; i < ks.length - 1; i++) { o = o[ks[i]] || (o[ks[i]] = {}); }
+    o[ks[ks.length - 1]] = val;
+  }
+
+  /* ---------- 通用表单 ---------- */
+  function field(label, path, opts) {
+    opts = opts || {};
+    var cur = getPath(state, path);
+    if (cur == null) cur = "";
+    var hint = opts.hint ? '<span class="hint">' + opts.hint + '</span>' : "";
+    if (opts.textarea) {
+      var lines = Array.isArray(cur) ? cur.join("\n") : cur;
+      return '<div class="field"><label>' + label + hint + '</label>' +
+        '<textarea data-path="' + path + '" data-textarea="' + (opts.array ? "1" : "0") + '">' + esc(lines) + '</textarea></div>';
+    }
+    return '<div class="field"><label>' + label + hint + '</label>' +
+      '<input type="text" data-path="' + path + '" value="' + esc(cur) + '" /></div>';
+  }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+  function bindInputs(root) {
+    root.querySelectorAll("[data-path]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var path = el.getAttribute("data-path");
+        if (el.getAttribute("data-textarea") === "1") {
+          setPath(state, path, el.value.split("\n").map(function (s) { return s.replace(/\r$/, ""); }).filter(function (s) { return s.trim() !== ""; }));
+        } else if (el.tagName === "TEXTAREA") {
+          setPath(state, path, el.value);
+        } else {
+          setPath(state, path, el.value);
+        }
+      });
+    });
+  }
+
+  /* ---------- 渲染各面板 ---------- */
+  function renderBasic() {
+    var el = document.getElementById("p-basic");
+    el.innerHTML =
+      '<h3>Hero</h3>' +
+      field("眉题", "hero.eyebrow") + field("姓名", "hero.name") + field("职位", "hero.role") +
+      field("一句话简介", "hero.lead") + field("标签（每行一个）", "hero.meta", { textarea: true, array: true }) +
+      '<h3>关于我</h3>' +
+      field("段落（每行一段，可用 <em> 标记强调）", "about.paragraphs", { textarea: true, array: true }) +
+      field("数据（每行：数值|标签）", "about.stats", { textarea: true }) +
+      field("个人照片路径", "about.photo", { hint: "如 assets/img/portrait.webp，换图后改这里即可" }) +
+      '<h3>联系方式</h3>' +
+      field("邮箱", "contact.email") + field("电话（展示）", "contact.phone") + field("电话（拨号，纯数字）", "contact.phoneRaw");
+    bindInputs(el);
+    // about.stats 特殊：文本行 -> [{value,label}]
+    el.querySelector('[data-path="about.stats"]').addEventListener("input", function () {
+      state.about.stats = this.value.split("\n").map(function (line) {
+        var p = line.split("|");
+        return { value: (p[0] || "").trim(), label: (p[1] || "").trim() };
+      }).filter(function (s) { return s.value || s.label; });
+    });
+  }
+
+  function renderEducation() {
+    var el = document.getElementById("p-edu");
+    el.innerHTML =
+      field("经历（每行：时间|学校|专业）", "education.items", { textarea: true }) +
+      field("主修课程（每行一个）", "education.courses", { textarea: true, array: true });
+    bindInputs(el);
+    el.querySelector('[data-path="education.items"]').addEventListener("input", function () {
+      state.education.items = this.value.split("\n").map(function (line) {
+        var p = line.split("|");
+        return { time: (p[0] || "").trim(), school: (p[1] || "").trim(), major: (p[2] || "").trim() };
+      }).filter(function (s) { return s.time || s.school || s.major; });
+    });
+  }
+
+  function renderSkills() {
+    var el = document.getElementById("p-skills");
+    el.innerHTML = '<div id="skillsList"></div><button class="add-btn" onclick="addSkill()">+ 添加技能组</button>';
+    drawSkills();
+  }
+  function drawSkills() {
+    var box = document.getElementById("skillsList");
+    box.innerHTML = state.skills.map(function (g, i) {
+      return '<div class="sub"><div class="sub-head"><strong>技能组 ' + (i + 1) + '</strong><button onclick="delSkill(' + i + ')">删除</button></div>' +
+        '<div class="field"><label>组名</label><input type="text" data-sk="' + i + '" data-f="title" value="' + esc(g.title) + '" /></div>' +
+        '<div class="field"><label>技能项（每行一个）</label><textarea data-sk="' + i + '" data-f="items">' + esc(g.items.join("\n")) + '</textarea></div></div>';
+    }).join("");
+    box.querySelectorAll("[data-sk]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var i = +el.getAttribute("data-sk"), f = el.getAttribute("data-f");
+        if (f === "items") state.skills[i].items = el.value.split("\n").map(function (s){return s.trim();}).filter(Boolean);
+        else state.skills[i][f] = el.value;
+      });
+    });
+  }
+  window.addSkill = function () { state.skills.push({ title: "新技能组", items: [] }); drawSkills(); };
+  window.delSkill = function (i) { state.skills.splice(i, 1); drawSkills(); };
+
+  function renderProjects() {
+    var el = document.getElementById("p-projects");
+    el.innerHTML = '<div id="projList"></div><button class="add-btn" onclick="addProject()">+ 添加项目</button>';
+    drawProjects();
+  }
+  function drawProjects() {
+    var box = document.getElementById("projList");
+    box.innerHTML = state.projects.map(function (p, i) {
+      return '<div class="sub"><div class="sub-head"><strong>项目 ' + (i + 1) + ' · ' + esc(p.title) + '</strong>' +
+        '<button onclick="moveProj(' + i + ',-1)">↑</button><button onclick="moveProj(' + i + ',1)">↓</button><button onclick="delProject(' + i + ')">删除</button></div>' +
+        '<div class="field"><label>标题</label><input type="text" data-p="' + i + '" data-f="title" value="' + esc(p.title) + '" /></div>' +
+        '<div class="row">' +
+        '<div class="field"><label>时间/职位</label><input type="text" data-p="' + i + '" data-f="meta" value="' + esc(p.meta || "") + '" /></div>' +
+        '<div class="field"><label>角标（flag，可空）</label><input type="text" data-p="' + i + '" data-f="flag" value="' + esc(p.flag || "") + '" /></div>' +
+        '</div>' +
+        '<div class="row">' +
+        '<div class="field"><label>链接</label><input type="text" data-p="' + i + '" data-f="link" value="' + esc(p.link || "") + '" /></div>' +
+        '<div class="field"><label>链接文字</label><input type="text" data-p="' + i + '" data-f="linkText" value="' + esc(p.linkText || "") + '" /></div>' +
+        '</div>' +
+        '<div class="field"><label>简介</label><textarea data-p="' + i + '" data-f="brief">' + esc(p.brief || "") + '</textarea></div>' +
+        '<div class="field"><label>要点（每行：加粗小标题|正文）</label><textarea data-p="' + i + '" data-f="points">' + esc((p.points || []).map(function (pt) { return pt.b + "|" + pt.text; }).join("\n")) + '</textarea></div>' +
+        '<div class="field"><label>标签（每行一个）</label><textarea data-p="' + i + '" data-f="tags">' + esc((p.tags || []).join("\n")) + '</textarea></div>' +
+        '<div class="field"><label>成果（result）</label><input type="text" data-p="' + i + '" data-f="result" value="' + esc(p.result || "") + '" /></div></div>';
+    }).join("");
+    box.querySelectorAll("[data-p]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var i = +el.getAttribute("data-p"), f = el.getAttribute("data-f");
+        if (f === "points") {
+          state.projects[i].points = el.value.split("\n").map(function (line) {
+            var k = line.indexOf("|");
+            return k >= 0 ? { b: line.slice(0, k).trim(), text: line.slice(k + 1).trim() } : { b: "", text: line.trim() };
+          }).filter(function (pt) { return pt.b || pt.text; });
+        } else if (f === "tags") {
+          state.projects[i].tags = el.value.split("\n").map(function (s){return s.trim();}).filter(Boolean);
+        } else {
+          state.projects[i][f] = el.value;
+        }
+      });
+    });
+  }
+  window.addProject = function () { state.projects.push({ title:"新项目", meta:"", flag:"", link:"", linkText:"", brief:"", points:[], tags:[], result:"" }); drawProjects(); };
+  window.delProject = function (i) { if (confirm("删除该项目？")) { state.projects.splice(i, 1); drawProjects(); } };
+  window.moveProj = function (i, d) { var j = i + d; if (j < 0 || j >= state.projects.length) return; var t = state.projects[i]; state.projects[i] = state.projects[j]; state.projects[j] = t; drawProjects(); };
+
+  function renderWorks() {
+    var el = document.getElementById("p-works");
+    el.innerHTML = '<div id="worksList"></div><button class="add-btn" onclick="addWork()">+ 添加作品卡片</button>';
+    drawWorks();
+  }
+  function drawWorks() {
+    var box = document.getElementById("worksList");
+    box.innerHTML = state.workCards.map(function (c, i) {
+      return '<div class="sub"><div class="sub-head"><strong>卡片 ' + (i + 1) + '</strong><button onclick="delWork(' + i + ')">删除</button></div>' +
+        '<div class="field"><label>标题</label><input type="text" data-w="' + i + '" data-f="title" value="' + esc(c.title) + '" /></div>' +
+        '<div class="field"><label>描述</label><textarea data-w="' + i + '" data-f="desc">' + esc(c.desc) + '</textarea></div>' +
+        '<div class="row">' +
+        '<div class="field"><label>链接（可空）</label><input type="text" data-w="' + i + '" data-f="link" value="' + esc(c.link || "") + '" /></div>' +
+        '<div class="field"><label>链接文字</label><input type="text" data-w="' + i + '" data-f="linkText" value="' + esc(c.linkText || "") + '" /></div>' +
+        '</div></div>';
+    }).join("");
+    box.querySelectorAll("[data-w]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var i = +el.getAttribute("data-w"), f = el.getAttribute("data-f");
+        state.workCards[i][f] = el.value;
+      });
+    });
+  }
+  window.addWork = function () { state.workCards.push({ title:"新卡片", desc:"", link:"", linkText:"" }); drawWorks(); };
+  window.delWork = function (i) { if (confirm("删除该卡片？")) { state.workCards.splice(i, 1); drawWorks(); } };
+
+  /* ---------- 标签页 ---------- */
+  document.getElementById("tabs").addEventListener("click", function (e) {
+    var t = e.target.closest(".tab"); if (!t) return;
+    document.querySelectorAll(".tab").forEach(function (x) { x.classList.remove("active"); });
+    document.querySelectorAll(".panel").forEach(function (x) { x.classList.remove("active"); });
+    t.classList.add("active");
+    document.getElementById(t.getAttribute("data-panel")).classList.add("active");
+  });
+
+  /* ---------- 动作 ---------- */
+  function setStatus(msg, ok) { var s = document.getElementById("status"); s.textContent = msg; s.className = "status " + (ok ? "ok" : "err"); }
+  window.preview = function () { window.open("index.html", "_blank"); };
+  window.exportJson = function () {
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "content.json"; a.click();
+  };
+  window.copyJson = function () {
+    navigator.clipboard.writeText(JSON.stringify(state, null, 2)).then(function () { setStatus("已复制 JSON，可粘贴回 data/content.json", true); });
+  };
+  window.publish = function () {
+    var token = document.getElementById("ghToken").value || localStorage.getItem("gh_token") || "";
+    var repo = document.getElementById("ghRepo").value;
+    var path = document.getElementById("ghPath").value;
+    var branch = document.getElementById("ghBranch").value;
+    localStorage.setItem("gh_token", token); localStorage.setItem("gh_repo", repo);
+    localStorage.setItem("gh_path", path); localStorage.setItem("gh_branch", branch);
+    if (!token) { setStatus("请先填写 GitHub Token", false); return; }
+    setStatus("发布中…", true);
+    var url = "https://api.github.com/repos/" + repo + "/contents/" + path;
+    var headers = { "Authorization": "token " + token, "Accept": "application/vnd.github+json" };
+    fetch(url, { headers: headers }).then(function (r) { return r.ok ? r.json() : { sha: null }; }).then(function (meta) {
+      var body = { message: "update content.json from admin", content: b64(JSON.stringify(state, null, 2)), branch: branch };
+      if (meta.sha) body.sha = meta.sha;
+      return fetch(url, { method: "PUT", headers: Object.assign({ "Content-Type": "application/json" }, headers), body: JSON.stringify(body) });
+    }).then(function (r) {
+      if (r.ok) setStatus("✅ 已发布！GitHub Pages 约 1-2 分钟生效", true);
+      else r.json().then(function (e) { setStatus("发布失败：" + (e.message || "未知错误"), false); });
+    }).catch(function (e) { setStatus("网络错误：" + e.message, false); });
+  };
+  function b64(str) { return btoa(unescape(encodeURIComponent(str))); }
+
+  /* ---------- 初始化 ---------- */
+  document.getElementById("ghToken").value = localStorage.getItem("gh_token") || "";
+  document.getElementById("ghRepo").value = localStorage.getItem("gh_repo") || "d15035520862-art/resume";
+  document.getElementById("ghPath").value = localStorage.getItem("gh_path") || "data/content.json";
+  document.getElementById("ghBranch").value = localStorage.getItem("gh_branch") || "main";
+
+  function initWith(data) {
+    state = data;
+    renderBasic(); renderEducation(); renderSkills(); renderProjects(); renderWorks();
+  }
+
+  function showLoadFail() {
+    var isFile = location.protocol === "file:";
+    var html = '<div style="padding:8px 0">' +
+      '<h3 style="color:#a33">⚠️ 无法加载 data/content.json</h3>' +
+      (isFile
+        ? '<p>检测到你是用 <b>file://（双击）</b> 打开的，浏览器禁止直接读取本地 JSON。</p>' +
+          '<p><b>推荐：</b>在「个人简历网站」目录运行 <code>python -m http.server 8000</code>，再访问 <code>http://localhost:8000/admin.html</code>；或直接访问线上 <code>https://d15035520862-art.github.io/resume/admin.html</code>。</p>'
+        : '<p>请确认 <code>data/content.json</code> 与 admin.html 在同一目录层级下。</p>') +
+      '<p style="margin-top:12px">也可以手动导入 JSON：</p>' +
+      '<p><input type="file" id="jsonFile" accept=".json,application/json" style="padding:6px" /> <button class="btn" onclick="importFile()">导入文件</button> <button class="btn" onclick="showPaste()">粘贴 JSON</button></p>' +
+      '<div id="pasteBox" style="display:none;margin-top:10px">' +
+      '<textarea id="pasteJson" style="min-height:120px" placeholder="粘贴 JSON 内容…"></textarea>' +
+      '<button class="btn primary" onclick="importPaste()" style="margin-top:8px">导入并编辑</button></div>' +
+      '</div>';
+    document.getElementById("p-basic").innerHTML = html;
+  }
+
+  window.importFile = function () {
+    var f = document.getElementById("jsonFile").files[0];
+    if (!f) { setStatus("请先选择 JSON 文件", false); return; }
+    var r = new FileReader();
+    r.onload = function () {
+      try { initWith(JSON.parse(r.result)); setStatus("已导入，可开始编辑", true); }
+      catch (e) { setStatus("JSON 解析失败：" + e.message, false); }
+    };
+    r.readAsText(f);
+  };
+  window.showPaste = function () { document.getElementById("pasteBox").style.display = "block"; };
+  window.importPaste = function () {
+    try { initWith(JSON.parse(document.getElementById("pasteJson").value)); setStatus("已导入，可开始编辑", true); }
+    catch (e) { setStatus("JSON 解析失败：" + e.message, false); }
+  };
+
+  fetch(DATA_URL).then(function (r) { if (!r.ok) throw new Error("load fail"); return r.json(); }).then(initWith).catch(showLoadFail);
+})();
+</script>
+</body>
+</html>

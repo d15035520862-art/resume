@@ -12,8 +12,12 @@
 个人简历网站/
 ├── index.html            # 单页首页（Hero / 关于 / 技能 / 项目 / 作品集 / 教育 / 联系）
 ├── resume.html           # 打印友好简历页（点「打印 / 保存为 PDF」即可导出）
+├── admin.html            # 🆕 内容后台：可视化修改 + 一键发布到 GitHub
+├── data/
+│   └── content.json      # 🆕 所有可编辑内容（Hero/关于/教育/技能/项目/作品卡片/联系）
 ├── css/style.css         # 全部样式（CSS 变量集中在此，方便改配色）
 ├── js/main.js            # 交互（导航 / 滚动显现 / 灯箱，仅用 IntersectionObserver）
+├── js/render.js          # 🆕 从 content.json 渲染内容到页面
 ├── assets/
 │   ├── img/portrait.webp     # 个人照片
 │   ├── img/logo.png          # 「丁艳楠」名字 logo（品牌标记，已去白底）
@@ -48,6 +52,25 @@ python -m http.server 8000
 - **GitHub Pages**：把文件推到仓库，Settings → Pages 选分支发布。
 
 > 提示：非遗剪纸成片已上传至小红书，网站中「观看成片」按钮统一跳转 `https://xhslink.cn/o/oZgALjuLpJ`（如需更换，搜索 `xhslink` 即可找到 2 处）。
+
+## 🆕 内容后台（admin.html）
+
+想改内容不用再碰 HTML，打开 **`admin.html`**（或线上 `…/admin.html`）即可：
+
+1. 可视化修改 Hero / 关于 / 教育 / 技能 / 项目经历 / 作品卡片 / 联系方式；
+2. 项目支持增删、上下移动；技能、作品卡片同理；
+3. 保存方式三选一：
+   - **发布到 GitHub**（推荐）：填一次 Token 后一键更新线上站点；
+   - **导出 / 复制 JSON**：得到更新后的 `data/content.json`，手动覆盖仓库里的同名文件再 commit。
+
+### 首次配置 GitHub 一键发布
+
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens**；
+2. 只勾选 `resume` 仓库 + 权限 **Contents: Read and write**；
+3. 把 Token 粘到后台顶部「⚙️ GitHub 发布设置」里（只存在你本浏览器 localStorage，不会进仓库）；
+4. 点「发布到 GitHub」，约 1-2 分钟线上生效。
+
+> 数据流：`admin.html` → 改 `data/content.json` → `js/render.js` 渲染到 `index.html`。若直接双击 `index.html`（file://）读取不到 JSON，页面会自动退回 HTML 里内置的默认内容，不影响展示。
 
 ---
 
