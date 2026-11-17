@@ -98,6 +98,50 @@
     }).join(""));
   }
 
+  function pad2(n) { return n < 10 ? "0" + n : String(n); }
+
+  function renderWorkFeatures(features) {
+    var box = document.getElementById("workFeatures");
+    if (!box) return;
+    box.innerHTML = (features || []).map(function (w) {
+      var head = '<div class="work-feature-head"><div>' +
+        '<h3>' + esc(w.title) + '</h3>' +
+        (w.note ? '<p class="work-note">' + esc(w.note) + '</p>' : '') +
+        '</div>' +
+        (w.link ? '<a class="btn btn-primary btn-sm" href="' + esc(w.link) + '" target="_blank" rel="noopener">' + esc(w.linkText || "查看 ↗") + '</a>' : '') +
+        '</div>';
+      var principles = (w.principles && w.principles.length)
+        ? '<div class="principle-row">' + w.principles.map(function (p) { return '<span>' + esc(p) + '</span>'; }).join('') + '</div>'
+        : '';
+      var pipeline = (w.pipeline && w.pipeline.length)
+        ? '<ol class="pipeline">' + w.pipeline.map(function (s, i) { return '<li><span>' + pad2(i + 1) + '</span>' + esc(s) + '</li>'; }).join('') + '</ol>'
+        : '';
+      var gif = w.gif
+        ? '<figure class="wechat-gif"><img src="' + esc(w.gif.src) + '" alt="' + esc(w.title) + '" loading="lazy" /><figcaption><b>动图演示</b><br/>' + esc(w.gif.caption || '') + '</figcaption></figure>'
+        : '';
+      var gridClass = w.grid === 'shots' ? 'wechat-shots' : 'storyboard';
+      var images = (w.images && w.images.length)
+        ? '<ul class="' + gridClass + '">' + w.images.map(function (img) {
+            var cap = img.caption ? '<b>' + esc(img.caption) + '</b>' : '';
+            if (img.desc) cap += '<br/>' + esc(img.desc);
+            return '<li><figure><img src="' + esc(img.src) + '" alt="' + esc(img.alt || '') + '" loading="lazy" /><figcaption>' + cap + '</figcaption></figure></li>';
+          }).join('') + '</ul>'
+        : '';
+      var quote = w.quote ? '<blockquote class="work-quote"><p>' + esc(w.quote) + '</p></blockquote>' : '';
+      return '<div class="work-feature reveal in">' + head + principles + pipeline + gif + images + quote + '</div>';
+    }).join('');
+    var lbox = document.getElementById("lightbox");
+    var lboxImg = document.getElementById("lightboxImg");
+    box.addEventListener("click", function (e) {
+      var img = e.target.closest("img");
+      if (!img || !lbox || !lboxImg) return;
+      lboxImg.src = img.src;
+      lboxImg.alt = img.alt || '';
+      lbox.hidden = false;
+      document.body.style.overflow = "hidden";
+    });
+  }
+
   function renderContact(c) {
     fill(".contact-grid",
       "<a class=\"contact-item reveal in\" href=\"mailto:" + esc(c.email) + "\">" +
@@ -119,6 +163,7 @@
       if (data.skills) renderSkills(data.skills);
       if (data.projects) renderProjects(data.projects);
       if (data.workCards) renderWorkCards(data.workCards);
+      if (data.works) renderWorkFeatures(data.works);
       if (data.contact) renderContact(data.contact);
     })
     .catch(function () {

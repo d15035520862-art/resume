@@ -253,6 +253,47 @@
       "linkText": "点击观看 ↗"
     }
   ],
+  "works": [
+    {
+      "title": "非遗剪纸 AI 短视频",
+      "note": "中国剪纸 · 2009 年入选联合国人类非物质文化遗产代表作名录",
+      "link": "https://xhslink.cn/o/oZgALjuLpJ",
+      "linkText": "▶ 观看成片（20s）",
+      "pipeline": ["文案", "分镜", "文生图", "图生视频", "剪辑合成"],
+      "grid": "storyboard",
+      "images": [
+        {"src": "assets/papercut/kf1.webp", "alt": "镜头1：一张红纸缓缓展开", "caption": "01 · 红纸展开"},
+        {"src": "assets/papercut/kf2.webp", "alt": "镜头2：剪刀剪红纸特写", "caption": "02 · 剪刀特写"},
+        {"src": "assets/papercut/kf3.webp", "alt": "镜头3：鱼与莲花纹样窗花", "caption": "03 · 鱼与莲花"},
+        {"src": "assets/papercut/kf4.webp", "alt": "镜头4：对称剪纸纹样", "caption": "04 · 对称纹样"},
+        {"src": "assets/papercut/kf5.webp", "alt": "镜头5：窗花贴窗年味场景", "caption": "05 · 贴窗年味"},
+        {"src": "assets/papercut/kf6.webp", "alt": "镜头6：剪纸鲤鱼游动", "caption": "06 · 鱼游花开"},
+        {"src": "assets/papercut/kf7.webp", "alt": "镜头7：落版字幕页", "caption": "07 · 落版"}
+      ],
+      "quote": "「生成 10 条只有 2–3 条能用，非遗纹样细节最容易画错。我用『参考图 + 风格锁定提示词』把合格率提上来——这就是持续优化生成质量与效率。」"
+    },
+    {
+      "title": "微信「生成式界面」重设计",
+      "note": "笔试题「重新设计微信」· 交互原型 · 8 界面可点击体验",
+      "link": "https://d15035520862-art.github.io/weichat-/",
+      "linkText": "在线体验 ↗",
+      "principles": ["高频确定", "低频生成", "关键可回退", "隐私最小化"],
+      "pipeline": ["静态保留", "对话化", "动态变化", "用完销毁", "对话式设置"],
+      "gif": {"src": "assets/wechat/wechat-demo.gif", "caption": "一句话生成文件面板 → 场景化发现页 → 一键切回经典界面兜底"},
+      "grid": "shots",
+      "images": [
+        {"src": "assets/wechat/01-home.png", "alt": "首页：高频入口保持不变，顶部新增微信助手", "caption": "① 静态保留", "desc": "首页高频入口不动，仅新增「微信助手」"},
+        {"src": "assets/wechat/02-assistant.png", "alt": "微信助手：一句话动态生成文件管理面板", "caption": "② 对话化", "desc": "一句话生成文件面板与摘要"},
+        {"src": "assets/wechat/04-group.png", "alt": "一句话创建聚餐群并发接龙", "caption": "③ 对话 + 用完销毁", "desc": "建群、拉人、接龙一步到位"},
+        {"src": "assets/wechat/03-files.png", "alt": "一次性文件面板用完即销毁", "caption": "④ 用完销毁", "desc": "临时面板完成即消失"},
+        {"src": "assets/wechat/05-discover-gen.png", "alt": "发现页按场景动态生成", "caption": "⑤ 动态变化", "desc": "发现页按早高峰/机场等场景生成"},
+        {"src": "assets/wechat/06-discover-classic.png", "alt": "经典发现页固定九宫格兜底", "caption": "⑥ 关键可回退", "desc": "一键切回经典固定九宫格兜底"},
+        {"src": "assets/wechat/07-moments.png", "alt": "朋友圈从全量信息流变为今日摘要", "caption": "⑦ 动态变化", "desc": "朋友圈变成可展开的今日摘要"},
+        {"src": "assets/wechat/08-privacy.png", "alt": "用自然语言管理隐私设置", "caption": "⑧ 对话式设置", "desc": "隐私设置用对话替代菜单树"}
+      ],
+      "quote": "「高频操作必须保持确定性；低频长尾功能由意图召唤、用完销毁；关键功能保留经典界面兜底——这才是 Agent 时代微信该有的形态。」"
+    }
+  ],
   "contact": {
     "email": "17720251151042@stu.xmu.edu.cn",
     "phone": "150 3552 0862",

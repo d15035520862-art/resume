@@ -32,6 +32,8 @@
   .sub-head strong { flex:1; }
   .sub-head button { border:0; background:transparent; color:var(--accent); cursor:pointer; font-size:13px; }
   .add-btn { width:100%; padding:10px; border:1px dashed var(--accent); background:transparent; color:var(--accent); border-radius:8px; cursor:pointer; font-size:13px; }
+  .photo-drop { border:2px dashed var(--line); border-radius:8px; padding:20px; text-align:center; cursor:pointer; color:var(--muted); }
+  .photo-drop.drag-over { border-color:var(--accent); color:var(--accent); background:#fbf3ef; }
   .status { padding:8px 12px; border-radius:6px; margin-top:10px; display:none; }
   .status.ok { display:block; background:#e7f4e4; color:#2c7a2c; }
   .status.err { display:block; background:#fdeaea; color:#a33; }
@@ -70,6 +72,7 @@
     <div class="tab" data-panel="p-edu">教育</div>
     <div class="tab" data-panel="p-skills">技能</div>
     <div class="tab" data-panel="p-projects">项目经历</div>
+    <div class="tab" data-panel="p-works2">作品集</div>
     <div class="tab" data-panel="p-works">作品卡片</div>
   </div>
 
@@ -77,6 +80,7 @@
   <section class="panel" id="p-edu"></section>
   <section class="panel" id="p-skills"></section>
   <section class="panel" id="p-projects"></section>
+  <section class="panel" id="p-works2"></section>
   <section class="panel" id="p-works"></section>
 
   <div class="status" id="status"></div>
@@ -141,7 +145,11 @@
       '<h3>关于我</h3>' +
       field("段落（每行一段，可用 <em> 标记强调）", "about.paragraphs", { textarea: true, array: true }) +
       field("数据（每行：数值|标签）", "about.stats", { textarea: true }) +
-      field("个人照片路径", "about.photo", { hint: "如 assets/img/portrait.webp，换图后改这里即可" }) +
+      '<div class="field"><label>个人照片</label>' +
+      '<div class="photo-drop" id="photoDrop">🖼️ 拖拽图片到这里，或点击选择本地图片</div>' +
+      '<input type="file" id="photoFile" accept="image/*" style="display:none" />' +
+      '<img id="photoPreview" src="' + esc(state.about.photo || '') + '" alt="照片预览" style="max-width:140px;max-height:140px;border-radius:6px;margin-top:8px;display:' + (state.about.photo ? 'block' : 'none') + '" />' +
+      '<input type="text" id="photoPath" value="' + esc(state.about.photo || '') + '" placeholder="或手动填图片路径（如 assets/img/portrait.webp）" style="margin-top:8px" /></div>' +
       '<h3>联系方式</h3>' +
       field("邮箱", "contact.email") + field("电话（展示）", "contact.phone") + field("电话（拨号，纯数字）", "contact.phoneRaw");
     bindInputs(el);
@@ -151,6 +159,44 @@
         var p = line.split("|");
         return { value: (p[0] || "").trim(), label: (p[1] || "").trim() };
       }).filter(function (s) { return s.value || s.label; });
+    });
+    // 照片：拖拽/选择 → 压缩 → base64 存 about.photo
+    var drop = document.getElementById("photoDrop");
+    var fileInput = document.getElementById("photoFile");
+    var preview = document.getElementById("photoPreview");
+    var pathInput = document.getElementById("photoPath");
+    function handlePhoto(file) {
+      if (!file || file.type.indexOf("image/") !== 0) { setStatus("请选择图片文件", false); return; }
+      var reader = new FileReader();
+      reader.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var max = 800, w = img.width, h = img.height;
+          if (w > max) { h = Math.round(h * max / w); w = max; }
+          if (h > max) { w = Math.round(w * max / h); h = max; }
+          var canvas = document.createElement("canvas");
+          canvas.width = w; canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          state.about.photo = dataUrl;
+          preview.src = dataUrl; preview.style.display = "block";
+          pathInput.value = "（已上传，图片已内嵌）";
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    drop.addEventListener("click", function () { fileInput.click(); });
+    drop.addEventListener("dragover", function (e) { e.preventDefault(); drop.classList.add("drag-over"); });
+    drop.addEventListener("dragleave", function () { drop.classList.remove("drag-over"); });
+    drop.addEventListener("drop", function (e) { e.preventDefault(); drop.classList.remove("drag-over"); handlePhoto(e.dataTransfer.files[0]); });
+    fileInput.addEventListener("change", function () { handlePhoto(fileInput.files[0]); });
+    pathInput.addEventListener("input", function () {
+      if (pathInput.value.indexOf("data:") !== 0) {
+        state.about.photo = pathInput.value;
+        preview.src = pathInput.value;
+        preview.style.display = pathInput.value ? "block" : "none";
+      }
     });
   }
 
@@ -261,6 +307,54 @@
   window.addWork = function () { state.workCards.push({ title:"新卡片", desc:"", link:"", linkText:"" }); drawWorks(); };
   window.delWork = function (i) { if (confirm("删除该卡片？")) { state.workCards.splice(i, 1); drawWorks(); } };
 
+  /* ---------- 作品集（大块） ---------- */
+  function renderWorkFeatures() {
+    var el = document.getElementById("p-works2");
+    el.innerHTML = '<div id="workFeatureList"></div><button class="add-btn" onclick="addWorkFeature()">+ 添加作品</button>';
+    drawWorkFeatures();
+  }
+  function drawWorkFeatures() {
+    var box = document.getElementById("workFeatureList");
+    if (!state.works) state.works = [];
+    box.innerHTML = state.works.map(function (w, i) {
+      return '<div class="sub"><div class="sub-head"><strong>作品 ' + (i + 1) + ' · ' + esc(w.title) + '</strong>' +
+        '<button onclick="moveWF(' + i + ',-1)">↑</button><button onclick="moveWF(' + i + ',1)">↓</button><button onclick="delWF(' + i + ')">删除</button></div>' +
+        '<div class="field"><label>标题</label><input type="text" data-wf="' + i + '" data-f="title" value="' + esc(w.title) + '" /></div>' +
+        '<div class="field"><label>说明</label><input type="text" data-wf="' + i + '" data-f="note" value="' + esc(w.note || "") + '" /></div>' +
+        '<div class="row"><div class="field"><label>链接</label><input type="text" data-wf="' + i + '" data-f="link" value="' + esc(w.link || "") + '" /></div>' +
+        '<div class="field"><label>链接文字</label><input type="text" data-wf="' + i + '" data-f="linkText" value="' + esc(w.linkText || "") + '" /></div></div>' +
+        '<div class="field"><label>设计原则（每行一个，可空）</label><textarea data-wf="' + i + '" data-f="principles">' + esc((w.principles || []).join("\n")) + '</textarea></div>' +
+        '<div class="field"><label>流程步骤（每行一个）</label><textarea data-wf="' + i + '" data-f="pipeline">' + esc((w.pipeline || []).join("\n")) + '</textarea></div>' +
+        '<div class="row"><div class="field"><label>动图地址（可空）</label><input type="text" data-wf="' + i + '" data-f="gif.src" value="' + esc((w.gif && w.gif.src) || "") + '" /></div>' +
+        '<div class="field"><label>动图说明</label><input type="text" data-wf="' + i + '" data-f="gif.caption" value="' + esc((w.gif && w.gif.caption) || "") + '" /></div></div>' +
+        '<div class="field"><label>网格样式</label><select data-wf="' + i + '" data-f="grid"><option value="storyboard"' + (w.grid !== "shots" ? " selected" : "") + '>storyboard（分镜图）</option><option value="shots"' + (w.grid === "shots" ? " selected" : "") + '>shots（标题+描述）</option></select></div>' +
+        '<div class="field"><label>图片列表（每行：路径|标题|描述，后两项可空）</label><textarea data-wf="' + i + '" data-f="images">' + esc((w.images || []).map(function (im) { return (im.src || "") + "|" + (im.caption || "") + "|" + (im.desc || ""); }).join("\n")) + '</textarea></div>' +
+        '<div class="field"><label>引用语（可空）</label><textarea data-wf="' + i + '" data-f="quote">' + esc(w.quote || "") + '</textarea></div>' +
+        '</div>';
+    }).join("");
+    box.querySelectorAll("[data-wf]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var i = +el.getAttribute("data-wf"), f = el.getAttribute("data-f");
+        if (f === "principles" || f === "pipeline") {
+          state.works[i][f] = el.value.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+        } else if (f === "images") {
+          state.works[i].images = el.value.split("\n").map(function (line) {
+            var p = line.split("|");
+            return { src: (p[0] || "").trim(), caption: (p[1] || "").trim(), desc: (p[2] || "").trim() };
+          }).filter(function (im) { return im.src; });
+        } else if (f === "gif.src" || f === "gif.caption") {
+          if (!state.works[i].gif) state.works[i].gif = {};
+          state.works[i].gif[f.split(".")[1]] = el.value;
+        } else {
+          state.works[i][f] = el.value;
+        }
+      });
+    });
+  }
+  window.addWorkFeature = function () { if (!state.works) state.works = []; state.works.push({ title: "新作品", note: "", link: "", linkText: "", principles: [], pipeline: [], gif: {}, grid: "storyboard", images: [], quote: "" }); drawWorkFeatures(); };
+  window.delWF = function (i) { if (confirm("删除该作品？")) { state.works.splice(i, 1); drawWorkFeatures(); } };
+  window.moveWF = function (i, d) { var j = i + d; if (j < 0 || j >= state.works.length) return; var t = state.works[i]; state.works[i] = state.works[j]; state.works[j] = t; drawWorkFeatures(); };
+
   /* ---------- 标签页 ---------- */
   document.getElementById("tabs").addEventListener("click", function (e) {
     var t = e.target.closest(".tab"); if (!t) return;
@@ -310,7 +404,7 @@
 
   function initWith(data) {
     state = data;
-    renderBasic(); renderEducation(); renderSkills(); renderProjects(); renderWorks();
+    renderBasic(); renderEducation(); renderSkills(); renderProjects(); renderWorkFeatures(); renderWorks();
   }
 
   function showLoadFail() {
