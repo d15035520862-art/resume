@@ -260,6 +260,53 @@
   ],
   "works": [
     {
+      "title": "轻卡日记｜AI 识别与营养记录产品",
+      "note": "个人 Vibe Coding 项目 · 从拍照识别到饮食记录的 MVP",
+      "link": "https://www.lingguang.com/share/FLASH_APP-29683b18-c93b-410f-91ee-65cd95e71d0b81?sharemedium=others",
+      "linkText": "在线体验 ↗",
+      "principles": [
+        "先降低记录成本",
+        "AI 输出必须可修正",
+        "先跑通主链路",
+        "用小样本验证"
+      ],
+      "pipeline": [
+        "用户输入与目标设置",
+        "热量目标计算",
+        "饮食记录入口",
+        "AI 识别与人工确认",
+        "历史统计与迭代"
+      ],
+      "grid": "shots",
+      "images": [
+        {
+          "src": "assets/lightcard/01-onboarding.png",
+          "alt": "轻卡日记首次设置页面",
+          "caption": "01 · 先完成用户设置",
+          "desc": "通过称呼、性别和年龄建立最基本的使用前提。"
+        },
+        {
+          "src": "assets/lightcard/02-profile.png",
+          "alt": "轻卡日记身体数据与活动水平设置页面",
+          "caption": "02 · 把目标转成可执行参数",
+          "desc": "收集身高、体重和活动水平，为后续热量目标提供依据。"
+        },
+        {
+          "src": "assets/lightcard/03-goal.png",
+          "alt": "轻卡日记每日热量目标页面",
+          "caption": "03 · 目标需要可解释、可调整",
+          "desc": "给出每日热量参考值，同时保留手动调整入口，避免把估算结果包装成绝对答案。"
+        },
+        {
+          "src": "assets/lightcard/04-record-home.png",
+          "alt": "轻卡日记每日饮食记录主页",
+          "caption": "04 · 回到核心任务：记录第一餐",
+          "desc": "首页围绕当日目标、已摄入量和早餐午餐晚餐展开，减少与记录无关的干扰。"
+        }
+      ],
+      "quote": "这次没有先做完整的健康管理平台，首先验证一件事：拍照识别能否降低用户完成一次饮食记录的成本。AI 识别不是最终答案，人工确认、失败重试和历史回顾共同构成了可用的产品闭环。"
+    },
+    {
       "title": "微信「生成式界面」重设计",
       "note": "「重新设计微信」· 交互原型 · 8 界面可点击体验",
       "link": "https://d15035520862-art.github.io/weichat-/",
@@ -333,53 +380,6 @@
         }
       ],
       "quote": "「高频操作必须保持确定性；低频长尾功能由意图召唤、用完销毁；关键功能保留经典界面兜底——这才是 Agent 时代微信该有的形态。」"
-    },
-    {
-      "title": "轻卡日记｜AI 识别与营养记录产品",
-      "note": "个人 Vibe Coding 项目 · 从拍照识别到饮食记录的 MVP",
-      "link": "https://www.lingguang.com/share/FLASH_APP-29683b18-c93b-410f-91ee-65cd95e71d0b81?sharemedium=others",
-      "linkText": "在线体验 ↗",
-      "principles": [
-        "先降低记录成本",
-        "AI 输出必须可修正",
-        "先跑通主链路",
-        "用小样本验证"
-      ],
-      "pipeline": [
-        "用户输入与目标设置",
-        "热量目标计算",
-        "饮食记录入口",
-        "AI 识别与人工确认",
-        "历史统计与迭代"
-      ],
-      "grid": "shots",
-      "images": [
-        {
-          "src": "assets/lightcard/01-onboarding.png",
-          "alt": "轻卡日记首次设置页面",
-          "caption": "01 · 先完成用户设置",
-          "desc": "通过称呼、性别和年龄建立最基本的使用前提。"
-        },
-        {
-          "src": "assets/lightcard/02-profile.png",
-          "alt": "轻卡日记身体数据与活动水平设置页面",
-          "caption": "02 · 把目标转成可执行参数",
-          "desc": "收集身高、体重和活动水平，为后续热量目标提供依据。"
-        },
-        {
-          "src": "assets/lightcard/03-goal.png",
-          "alt": "轻卡日记每日热量目标页面",
-          "caption": "03 · 目标需要可解释、可调整",
-          "desc": "给出每日热量参考值，同时保留手动调整入口，避免把估算结果包装成绝对答案。"
-        },
-        {
-          "src": "assets/lightcard/04-record-home.png",
-          "alt": "轻卡日记每日饮食记录主页",
-          "caption": "04 · 回到核心任务：记录第一餐",
-          "desc": "首页围绕当日目标、已摄入量和早餐午餐晚餐展开，减少与记录无关的干扰。"
-        }
-      ],
-      "quote": "这次没有先做完整的健康管理平台，而是先验证一件事：拍照识别能否降低用户完成一次饮食记录的成本。AI 识别不是最终答案，人工确认、失败重试和历史回顾共同构成了可用的产品闭环。"
     }
   ],
   "contact": {
